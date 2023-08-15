@@ -119,8 +119,13 @@ def place_holder_main_window(LTS_setup):
         [sg.Button("Close")]
     ]
 
+    bottom_info = [
+        [sg.Text('Raster sequence eliptical aperture:')],
+        [sg.Button('Set dimensions and go', k='-RASTER_GO-')]
+    ]
 
-    layout = [top_info, [sg.Column(col1), sg.Column(col2)]]
+
+    layout = [top_info, [sg.Column(col1), sg.Column(col2)], bottom_info]
 
     window = sg.Window("Concept", layout, finalize=True, icon='images/favicon.ico')
     tkcanvas = draw_figure(window['-CANVAS-'].TKCanvas, fig)
@@ -151,6 +156,12 @@ def place_holder_main_window(LTS_setup):
         window['-JOG_OUTPUT-'].update(value = jog_str)
 
         window.refresh()
+
+
+        if event == '-RASTER_GO-':
+            aperture_dimensions = GUI.input_aperture_popup()
+            
+
 
 
         if event == '-CUR_POS_ZERO-':

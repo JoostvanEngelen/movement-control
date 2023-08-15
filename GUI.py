@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 
 def home_window(LTS_setup):
+    sg.theme('Default 1')
     layout = [
         [sg.Text("Connection with LTS300\\Ms established successfully.")],
         [sg.Text("The stages should be homed before continuing.")],
@@ -40,6 +41,7 @@ def home_window(LTS_setup):
   
 
 def input_coordinates_popup():
+    sg.theme('Default 1')
     layout = [
         [sg.Text("Enter Coordinates:")],
         [sg.Text("X1:", size=(5,1)), sg.InputText("", size=(10, 1), key='-X1-')],
@@ -79,3 +81,54 @@ def input_coordinates_popup():
     # Close the popup window
     window.close()
     return coordinates
+
+
+def input_aperture_popup():
+    sg.theme('Default 1')
+    layout = [
+        [sg.Text("Select aperture dimensions:")],
+        [sg.Combo(values=('Elliptical', 'Rectangular'), default_value='Elliptical', readonly=True, k='-SHAPE-')],
+        [sg.Text("Center X (mm):", size=(12,1)), sg.InputText("", size=(10, 1), key='-CX-')],
+        [sg.Text("Center Y (mm):", size=(12,1)), sg.InputText("", size=(10, 1), key='-CY-')],
+        [sg.Text("Height (mm):", size=(12,1)), sg.InputText("", size=(10, 1), key='-HEIGHT-')],
+        [sg.Text("Width (mm):", size=(12,1)), sg.InputText("", size=(10, 1), key='-WIDTH-')],
+        [sg.Text("Angle (degrees):", size=(12,1)), sg.InputText("0", size=(10, 1), key='-ANGLE-')],
+        [sg.Button("OK"), sg.Button("Cancel")]
+    ]
+
+    # Create the popup window
+    window = sg.Window("Enter Coordinates", layout, finalize=True,  icon='images/favicon.ico')
+
+    # Event loop for the popup window
+    while True:
+        event, values = window.read()
+
+        if event == sg.WIN_CLOSED or event == "Cancel":
+            aperture_characteristics = None
+            break
+        
+        if event == 'OK':
+            try:
+                shape = values['-SHAPE-']
+                center_x = float(values['-CX-'])
+                center_y = float(values['-CY-'])
+                height = float(values['-HEIGHT-'])
+                width = float(values['-WIDTH-'])
+                angle = float(values['-ANGLE-'])
+
+                aperture_characteristics = {
+                    'shape': shape,
+                    'center_x': center_x,
+                    'center_y': center_y,
+                    'height': height,
+                    'width': width,
+                    'angle': angle
+                }
+                break
+
+            except Exception as e:
+                sg.Popup(f"Please enter a valid aperture shape: {e}", keep_on_top=True)
+            
+
+    return aperture_characteristics
+
