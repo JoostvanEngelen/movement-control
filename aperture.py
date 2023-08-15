@@ -73,16 +73,13 @@ class RectangularAperture:
                 removed_points.append(point)
         return safe_seq
   
-
-def create_raster_sequence(center, size, resolution):
-    # This is now just a square centered around the middle but could be anything
-    xgrid = np.linspace(center[0] - size/2, center[0] + size/2, resolution) 
-    ygrid = np.linspace(center[1] - size/2, center[1] + size/2, resolution)
+def raster_sequence_entire_plane(step_size):
+    steps = np.arange(0, 300 + step_size, step_size)
     xscan = []
     yscan = []
-    for i, yi in enumerate(ygrid):
-        xscan.append(xgrid[::(-1)**i]) # reverse when i is odd
-        yscan.append(np.ones_like(xgrid) * yi)
+    for i, yi in enumerate(steps):
+        xscan.append(steps[::(-1)**i]) # reverse when i is odd
+        yscan.append(np.ones_like(steps) * yi)
     xscan = np.concatenate(xscan)
     yscan = np.concatenate(yscan)
     sequence = []
@@ -90,23 +87,33 @@ def create_raster_sequence(center, size, resolution):
         sequence.append((xscan[i], yscan[i]))
     return sequence
 
-
-el = EllipcicalAperture(50, 150, (150,150), angle=0)
-# el = RectangularAperture(8, 4, (.5, 1), angle=40)
-
-seq = create_raster_sequence((150,150), 300, 40)
-plt.scatter(*zip(*seq))
-plt.xlim([-5, 305])
-plt.ylim([-5, 305])
-plt.grid()
-plt.show()
+def raster_given_aperture(aperture:object, step_size):
+    seq = raster_sequence_entire_plane(step_size)
+    return aperture.remove_points_outside_aperture(seq)
 
 
-new_seq = el.remove_points_outside_aperture(seq)
-plt.plot(*zip(*new_seq), '-bo')
-plt.xlim([-5, 305])
-plt.ylim([-5, 305])
-plt.grid()
-plt.show()
+
+# el = EllipcicalAperture(150, 150, (150,100), angle=0)
+# # el = RectangularAperture(50, 150, (150,150), angle=45)
+
+
+
+
+
+
+
+# # plt.scatter(*zip(*seq))
+# # plt.xlim([-5, 305])
+# # plt.ylim([-5, 305])
+# # plt.grid()
+# # plt.show()
+
+
+# new_seq = raster_given_aperture(el, 10)
+# plt.plot(*zip(*new_seq), '-bo')
+# plt.xlim([-5, 305])
+# plt.ylim([-5, 305])
+# plt.grid()
+# plt.show()
 
 
