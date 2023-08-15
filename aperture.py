@@ -39,7 +39,7 @@ class EllipcicalAperture:
 
 
 class RectangularAperture:
-    def __init__(self, width, height, center: tuple, angle=0):
+    def __init__(self, height, width, center: tuple, angle=0):
         self.aperture_shape = 'rectangular'
         self.width = width
         self.height = height
