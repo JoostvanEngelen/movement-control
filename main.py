@@ -52,9 +52,15 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 #     return sequence
 
 
-def measurement_sequence(LTS_system, sequence):
+def measurement_sequence(LTS_setup, sequence, window):
     for x_co, y_co in sequence:
-        LTS_system.move_to(x_co, y_co)
+        target_position = {
+            'x1': x_co,
+            'x2': x_co,
+            'y1': y_co,
+            'y2': y_co
+        }
+        LTS_setup.move_to_absolute_position(target_position, window)
         # HERE DO THE MEASUREMENT
         time.sleep(0.5) # this is a replacement for some measurement
     return
@@ -175,7 +181,7 @@ def place_holder_main_window(LTS_setup):
             
             seq = raster_given_aperture(aperture, raster_step_size)
 
-            measurement_sequence(LTS_setup, seq)
+            measurement_sequence(LTS_setup, seq, window)
 
 
 

@@ -127,7 +127,7 @@ def input_aperture_popup():
             except Exception as e:
                 sg.Popup(f"Please enter a valid aperture shape: {e}", keep_on_top=True)
             
-
+    window.close
     return aperture_characteristics
 
 def input_step_size_popup():
@@ -154,8 +154,8 @@ def input_step_size_popup():
 
             except Exception as e:
                 sg.Popup(f"Please enter a valid aperture shape: {e}", keep_on_top=True)
-
+    window.close()
     return step_size
 
 
-print(input_step_size_popup())
+
