@@ -27,6 +27,7 @@ import device_settings
 from linear_translation_stage import LTS300, LTS300System
 import GUI
 from misc_functions import *
+from aperture import *
 
 import matplotlib
 matplotlib.use('TkAgg')
@@ -51,12 +52,12 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 #     return sequence
 
 
-# def measurement_sequence(LTS_system, sequence):
-#     for x_co, y_co in sequence:
-#         LTS_system.move_to(x_co, y_co)
-#         # HERE DO THE MEASUREMENT
-#         time.sleep(0.5) # this is a replacement for some measurement
-#     return
+def measurement_sequence(LTS_system, sequence):
+    for x_co, y_co in sequence:
+        LTS_system.move_to(x_co, y_co)
+        # HERE DO THE MEASUREMENT
+        time.sleep(0.5) # this is a replacement for some measurement
+    return
 
 
 
@@ -160,6 +161,24 @@ def place_holder_main_window(LTS_setup):
 
         if event == '-RASTER_GO-':
             aperture_dimensions = GUI.input_aperture_popup()
+            raster_step_size = GUI.input_step_size_popup()
+
+            ap_height = aperture_dimensions['height']
+            ap_width = aperture_dimensions['width']
+            ap_center = (aperture_dimensions['center_x'], aperture_dimensions['center_y'])
+            ap_angle = aperture_dimensions['angle']
+
+            if aperture_dimensions['shape'] == 'Elliptical':
+                aperture = EllipcicalAperture(ap_height, ap_width, ap_center, ap_angle)
+            elif aperture_dimensions['shape'] == 'Rectangular':
+                aperture = RectangularAperture(ap_height, ap_width, ap_center, ap_angle)
+            
+            seq = raster_given_aperture(aperture, raster_step_size)
+
+            measurement_sequence(LTS_setup, seq)
+
+
+
             
 
 

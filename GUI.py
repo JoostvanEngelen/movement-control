@@ -38,8 +38,6 @@ def home_window(LTS_setup):
     print('all done homing! ...or not...')
     window.close()
             
-  
-
 def input_coordinates_popup():
     sg.theme('Default 1')
     layout = [
@@ -97,7 +95,7 @@ def input_aperture_popup():
     ]
 
     # Create the popup window
-    window = sg.Window("Enter Coordinates", layout, finalize=True,  icon='images/favicon.ico')
+    window = sg.Window("Enter aperture details", layout, finalize=True,  icon='images/favicon.ico')
 
     # Event loop for the popup window
     while True:
@@ -132,3 +130,32 @@ def input_aperture_popup():
 
     return aperture_characteristics
 
+def input_step_size_popup():
+    sg.theme('Default 1')
+    layout = [
+        [sg.Text("Raster step size (mm): "),  sg.InputText("", size=(10, 1), key='-STEPSIZE-')],
+        [sg.Button("OK"), sg.Button("Cancel")]
+    ]
+
+    window = sg.Window("Enter step size", layout, finalize=True,  icon='images/favicon.ico')
+
+    # Event loop for the popup window
+    while True:
+        event, values = window.read()
+
+        if event == sg.WIN_CLOSED or event == "Cancel":
+            step_size = None
+            break
+        
+        if event == 'OK':
+            try:
+                step_size = float(values['-STEPSIZE-'])
+                break
+
+            except Exception as e:
+                sg.Popup(f"Please enter a valid aperture shape: {e}", keep_on_top=True)
+
+    return step_size
+
+
+print(input_step_size_popup())
